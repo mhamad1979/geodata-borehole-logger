@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, FileText, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +34,7 @@ const HOLE_TYPE_OPTIONS = [
 ];
 
 export default function NewLogPage() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -285,6 +287,11 @@ export default function NewLogPage() {
       window.URL.revokeObjectURL(url);
 
       setSuccessMessage("PDF generated and downloaded successfully");
+
+      // Redirect to projects page after short delay
+      setTimeout(() => {
+        router.push("/projects");
+      }, 1500);
     } catch {
       setErrorMessage("Network error. Please try again.");
     } finally {
