@@ -16,7 +16,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -97,12 +96,12 @@ export function Header({ userEmail }: HeaderProps) {
               </span>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" sideOffset={8} className="w-56">
-              <DropdownMenuLabel>
+              <div className="px-2 py-1.5">
                 <p className="text-xs text-muted-foreground">Signed in as</p>
                 <p className="truncate text-sm font-medium">
                   {userEmail || "User"}
                 </p>
-              </DropdownMenuLabel>
+              </div>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="mr-2 h-4 w-4" />
