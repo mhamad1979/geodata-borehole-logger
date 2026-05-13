@@ -131,6 +131,9 @@ export default function RegisterPage() {
               const supabase = createClient();
               const { error: authError } = await supabase.auth.signInWithOAuth({
                 provider: "google",
+                options: {
+                  redirectTo: `${window.location.origin}/auth/callback`,
+                },
               });
               if (authError) setError(authError.message);
             }}
