@@ -9,7 +9,7 @@ const protectedPaths = ["/dashboard", "/projects", "/boreholes", "/new-log"];
 const authPaths = ["/login", "/register", "/reset-password"];
 
 // Routes that should be completely skipped by middleware
-const publicPaths = ["/auth/callback"];
+const publicPaths = ["/auth/callback", "/auth"];
 
 function isProtectedRoute(pathname: string): boolean {
   return protectedPaths.some(
@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Skip middleware entirely for public paths (like OAuth callback)
-  if (publicPaths.some((p) => pathname.startsWith(p))) {
+  if (pathname === "/" || publicPaths.some((p) => pathname.startsWith(p))) {
     return NextResponse.next();
   }
 
