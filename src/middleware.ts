@@ -3,10 +3,13 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Routes that require authentication (app route group)
-const protectedPaths = ["/dashboard", "/projects", "/boreholes"];
+const protectedPaths = ["/dashboard", "/projects", "/boreholes", "/new-log"];
 
 // Routes that are only for unauthenticated users (auth route group)
 const authPaths = ["/login", "/register", "/reset-password"];
+
+// Routes that should be completely skipped by middleware
+const publicPaths = ["/auth/callback"];
 
 function isProtectedRoute(pathname: string): boolean {
   return protectedPaths.some(
@@ -21,6 +24,13 @@ function isAuthRoute(pathname: string): boolean {
 }
 
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  // Skip middleware entirely for public paths (like OAuth callback)
+  if (publicPaths.some((p) => pathname.startsWith(p))) {
+    return NextResponse.next();
+  }
+
   // Create a response that we can modify
   let response = NextResponse.next({
     request: {
@@ -66,8 +76,6 @@ export async function middleware(request: NextRequest) {
   const {
     data: { session },
   } = await supabase.auth.getSession();
-
-  const pathname = request.nextUrl.pathname;
 
   // If no session and trying to access a protected route, redirect to login
   if (!session && isProtectedRoute(pathname)) {
